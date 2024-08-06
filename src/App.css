@@ -1,7 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh; /* Ensures the root container covers the full viewport height */
+  box-sizing: border-box;
+  padding-bottom: 50px; /* To prevent content from being hidden behind the footer */
 }
 
 .logo {
@@ -10,9 +19,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -38,4 +49,16 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.footer {
+  position: relative;
+  bottom: 0;
+  height: 50px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1000; /* Ensure the footer is above other elements */
 }
