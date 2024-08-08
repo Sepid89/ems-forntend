@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import EmployeeService from "../services/EmployeeService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EmployeeComponent = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const navigator = useNavigate();
+  const { id } = useParams();
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -57,12 +58,20 @@ const EmployeeComponent = () => {
     setErrors(errorCopy);
     return valid;
   }
+
+  function pageTitle() {
+    if (id) {
+      <h2 className="text-center">Update Employee</h2>;
+    } else {
+      <h2 className="text-center">Add Employee</h2>;
+    }
+  }
   return (
     <div className="container">
       <br />
       <div className="row">
         <div className="card col-md-6 offset-md-3 offset-md-3">
-          <h2 className="text-center">Add Employee</h2>
+          {pageTitle()}
           <div className="card-body">
             <form>
               <div className="form-group mb-2">
