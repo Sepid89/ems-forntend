@@ -7,19 +7,34 @@ const ListEmployeeComponent = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
-    EmployeeService.listEmployees()
-      .then((response) => {
-        setEmployee(response.data);
-      })
-      .catch((error) => console.error(error));
+    getAllEmployees();
   }, []);
 
   function addNewEmployee() {
     navigator("/add-employee");
   }
 
-  function updateEmployee(id){
+  function updateEmployee(id) {
     navigator(`/update-employee/${id}`);
+  }
+
+  function getAllEmployees() {
+    EmployeeService.listEmployees()
+      .then((response) => {
+        setEmployee(response.data);
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function deleteEmployee(id) {
+    if (id) {
+      EmployeeService.deleteEmployee(id)
+        .then((response) => {
+          console.log(response.data);
+          getAllEmployees();
+        })
+        .catch((error) => console.error(error));
+    }
   }
 
   return (
@@ -51,6 +66,13 @@ const ListEmployeeComponent = () => {
                   onClick={() => updateEmployee(employee.id)}
                 >
                   Update
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => deleteEmployee(employee.id)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  delete
                 </button>
               </td>
             </tr>
