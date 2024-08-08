@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EmployeeService from "../services/EmployeeService";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -14,18 +14,40 @@ const EmployeeComponent = () => {
     email: "",
   });
 
-  function saveEmployee(e) {
+  useEffect(() => {
+    if (id) {
+      EmployeeService.getEmployee(id)
+        .then((response) => {
+          setFirstName(response.data.firstName);
+          setLastName(response.data.lastName);
+          setEmail(response.data.email);
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [id]);
+
+  function saveOrUpdateEmployee(e) {
     e.preventDefault();
 
     if (validateForm()) {
       const employee = { firstName, lastName, email };
       console.log(employee);
 
-      EmployeeService.createEmployee(employee).then((result) => {
-        result.log(result.data);
-      });
-
-      navigator("/employees");
+      if (id) {
+        EmployeeService.updateEmployee(id, employee)
+          .then((result) => {
+            console.log(result.data);
+            navigator("/employees");
+          })
+          .catch((error) => console.error(error));
+      } else {
+        EmployeeService.createEmployee(employee)
+          .then((result) => {
+            console.log(result.data);
+            navigator("/employees");
+          })
+          .catch((error) => console.error(error));
+      }
     }
   }
 
@@ -123,7 +145,10 @@ const EmployeeComponent = () => {
                 )}
               </div>
 
-              <button className="btn btn-success" onClick={saveEmployee}>
+              <button
+                className="btn btn-success"
+                onClick={saveOrUpdateEmployee}
+              >
                 Submit
               </button>
             </form>
